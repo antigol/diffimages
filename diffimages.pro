@@ -41,3 +41,6 @@ OTHER_FILES += \
 FORMS += \
     mainwindow.ui \
     openimagesdialog.ui
+
+target.path = /usr/bin
+INSTALLS += target

@@ -1,0 +1,16 @@
+Source: diffimages
+Section: unknown
+Priority: extra
+Maintainer: Mario Geiger <geiger.mario@gmail.com>
+Build-Depends: debhelper (>= 8.0.0), libqt4-dev (>= 4), libqt4-opengl-dev (>= 4), g++ (>= 4)
+Standards-Version: 3.9.2
+Homepage: <insert the upstream URL, if relevant>
+#Vcs-Git: git://git.debian.org/collab-maint/diffimages.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/diffimages.git;a=summary
+
+Package: diffimages
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: make diff on images
+ Recommends: hugin
+ 
