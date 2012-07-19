@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>subtraction.frag</file>
+        <file>sgfilter.frag</file>
+        <file>flat.vert</file>
+        <file>render.frag</file>
+        <file>render3D.vert</file>
+        <file>render3D.frag</file>
+        <file>viewer.frag</file>
+    </qresource>
+</RCC>
