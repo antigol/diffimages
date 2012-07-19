@@ -6,6 +6,7 @@
 #include <QtAlgorithms>
 #include <cmath>
 
+
 #define BUFFER_OFFSET(a) ((char*)NULL + (a))
 
 GLWidget::GLWidget(QWidget *parent)
