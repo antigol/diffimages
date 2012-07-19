@@ -179,6 +179,8 @@ QImage GLWidget::capture()
 
 void GLWidget::initializeGL()
 {
+    glActiveTexture = (PFNGLACTIVETEXTUREPROC)context()->getProcAddress("glActiveTexture");
+
     _subtraction = new QGLShaderProgram(this);
     _subtraction->addShaderFromSourceFile(QGLShader::Vertex, ":/flat.vert");
     _subtraction->addShaderFromSourceFile(QGLShader::Fragment, ":/subtraction.frag");

@@ -6,6 +6,8 @@
 #include <QtOpenGL/QGLFramebufferObject>
 #include <QtOpenGL/QGLBuffer>
 
+#include <GL/glext.h>
+
 class GLWidget : public QGLWidget
 {
     Q_OBJECT
@@ -89,6 +91,8 @@ private:
     QPointF _lastMousePosition;
 
     QVector<float> _data;
+
+    PFNGLACTIVETEXTUREPROC glActiveTexture;
 };
 
 #endif // WIDGET_H

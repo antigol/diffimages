@@ -7,6 +7,8 @@
 #include <QImage>
 #include <QVector>
 
+#include <GL/glext.h>
+
 class ImageViewer : public QGLWidget
 {
     Q_OBJECT
@@ -32,6 +34,8 @@ private:
     GLuint _texture0;
     bool _newImage;
     bool _needUpdateData;
+
+    PFNGLACTIVETEXTUREPROC glActiveTexture;
 };
 
 #endif // IMAGEVIEWER_H

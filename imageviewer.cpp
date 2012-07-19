@@ -37,6 +37,8 @@ const QVector<GLfloat> &ImageViewer::data()
 
 void ImageViewer::initializeGL()
 {
+    glActiveTexture = (PFNGLACTIVETEXTUREPROC)context()->getProcAddress("glActiveTexture");
+
     _shader = new QGLShaderProgram(this);
     _shader->addShaderFromSourceFile(QGLShader::Vertex, ":/flat.vert");
     _shader->addShaderFromSourceFile(QGLShader::Fragment, ":/viewer.frag");
