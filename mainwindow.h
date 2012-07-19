@@ -21,10 +21,8 @@ public:
 public slots:
     void openGUI();
     
-protected:
-    virtual void keyPressEvent(QKeyEvent *e);
-
 private slots:
+    void changeSubtractionModeGUI();
     void changeBackgroundFactorGUI();
     void readBackgroundFactor();
     void changeSavitzkyGolayFilterGUI(bool on);

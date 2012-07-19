@@ -11,8 +11,7 @@ uniform mat4 matrix;
 uniform float aspect;
 uniform float zscale;
 
-out vec4 col;
-//out vec2 coord;
+out vec4 color_vert;
 
 void main(void)
 {
@@ -41,5 +40,5 @@ void main(void)
         c = vec3(1,1,1);
     }
 
-    col = vec4(c, 1.0);
+    color_vert = vec4(c, 1.0);
 }

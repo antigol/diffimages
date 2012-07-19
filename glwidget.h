@@ -14,6 +14,8 @@ public:
     GLWidget(QWidget *parent = 0);
     ~GLWidget();
 
+    void setSubtractMode(bool backgroundMinusImage);
+
     GLfloat backgroundFactor() const;
     void setBackgroundFactor(GLfloat factor);
 
@@ -72,6 +74,7 @@ private:
     int _wviewport, _hviewport;
     int _width, _height;
 
+    bool _backgroundMinusImage;
     GLfloat _backgroundFactor;
     bool _sgfilterEnabled;
     GLfloat _colormapEnd;

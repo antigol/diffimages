@@ -22,30 +22,37 @@ MainWindow::MainWindow(QWidget *parent) :
     QSplitter *splitter = new QSplitter(Qt::Vertical, this);
     QWidget *widget = new QWidget(this);
     QHBoxLayout *layout = new QHBoxLayout(widget);
+    layout->setMargin(0);
     layout->addWidget(_imageViewer);
     layout->addWidget(_backgroundViewer);
     splitter->addWidget(widget);
     splitter->addWidget(_glwidget);
+    splitter->setSizes(QList<int>() << 0.3 * height() << 0.7 * height());
     setCentralWidget(splitter);
 
     QMenu *file = menuBar()->addMenu("File");
 
     QAction *open = new QAction("Open images...", this);
     open->setShortcuts(QKeySequence::Open);
-
     connect(open, SIGNAL(triggered()), this, SLOT(openGUI()));
     file->addAction(open);
 
+
     QAction *capture = new QAction("Save a capture...", this);
+    capture->setShortcut(QKeySequence::Print);
     connect(capture, SIGNAL(triggered()), this, SLOT(saveCaptureGUI()));
     file->addAction(capture);
 
     QAction *exportData = new QAction("export brut data...", this);
+    exportData->setShortcut(QKeySequence::Save);
     connect(exportData, SIGNAL(triggered()), this, SLOT(exportBrutDataGUI()));
     file->addAction(exportData);
 
-    ui->multihistogram->addHistogram(QColor(255, 0, 0, 100));
-    ui->multihistogram->addHistogram(QColor(0, 0, 255, 100));
+    ui->multihistogram->addHistogram(QColor(0, 0, 255, 150));
+    ui->multihistogram->addHistogram(QColor(255, 0, 0, 200));
+
+    connect(ui->bmiRadioButton, SIGNAL(clicked()), this, SLOT(changeSubtractionModeGUI()));
+    connect(ui->imbRadioButton, SIGNAL(clicked()), this, SLOT(changeSubtractionModeGUI()));
 
     connect(_glwidget, SIGNAL(dataChanged()), this, SLOT(updateHistogramData()));
 
@@ -80,9 +87,19 @@ void MainWindow::openGUI()
     OpenImagesDialog d(this);
     if (d.exec()) {
         QImage img(d.imageFilepath());
+        if (img.isNull()) {
+            QMessageBox::warning(this, "error", "The image is null.");
+            return;
+        }
         QImage bck(d.backgroundFilepath());
-        if (!_glwidget->openImages(bck, img))
+        if (bck.isNull()) {
+            QMessageBox::warning(this, "error", "The background is null.");
+            return;
+        }
+        if (!_glwidget->openImages(bck, img)) {
             QMessageBox::warning(this, "error", "Cannot load thoses images. They must have the same size.");
+            return;
+        }
         _imageViewer->setModificator(1.0, 0.0);
         _imageViewer->setImage(img);
         _backgroundViewer->setModificator(ui->backgroundFactorBfDoubleSpinBox->value(), 0.0);
@@ -96,9 +113,10 @@ void MainWindow::openGUI()
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *e)
+void MainWindow::changeSubtractionModeGUI()
 {
-    QMainWindow::keyPressEvent(e);
+    _glwidget->setSubtractMode(ui->bmiRadioButton->isChecked());
+    _glwidget->updateGL();
 }
 
 void MainWindow::changeBackgroundFactorGUI()

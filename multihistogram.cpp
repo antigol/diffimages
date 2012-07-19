@@ -68,7 +68,7 @@ void MultiHistogram::paintEvent(QPaintEvent *)
             for (int j = jj; j < _datas[i].second.size(); ++j) {
                 if (_datas[i].second[j] < ((x+1) * sub + beg)) {
                     if (_datas[i].second[j] >= (x * sub + beg))
-                        c++;
+                        c += 1.0;
                 } else {
                     jj = j;
                     break;

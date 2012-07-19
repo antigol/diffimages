@@ -5,6 +5,7 @@ in vec2 coord;
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 
+uniform float postfactor;
 uniform float backgroundFactor; // facteur de proportionalité pour accorder la luminosité entre la texture0 et la texture1
 
 out float color;
@@ -23,5 +24,6 @@ void main(void)
 
     float t0k = t0 * backgroundFactor;
     color = t0k - t1;
+    color *= postfactor;
     return;
 }

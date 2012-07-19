@@ -16,6 +16,7 @@ GLWidget::GLWidget(QWidget *parent)
     _subtraction = _sgfilter = _render = _render3D = 0;
 
     _fbo = 0;
+    _backgroundMinusImage = true;
     _sgfilterEnabled = true;
     _needUpdateFBO = true;
     _3dEnabled = false;
@@ -35,6 +36,14 @@ GLWidget::~GLWidget()
 {
 }
 
+void GLWidget::setSubtractMode(bool backgroundMinusImage)
+{
+    if (_backgroundMinusImage != backgroundMinusImage) {
+        _backgroundMinusImage = backgroundMinusImage;
+        _needUpdateFBO = true;
+    }
+}
+
 GLfloat GLWidget::backgroundFactor() const
 {
     return _backgroundFactor;
@@ -42,11 +51,8 @@ GLfloat GLWidget::backgroundFactor() const
 
 void GLWidget::setBackgroundFactor(GLfloat factor)
 {
-    if (_backgroundFactor != factor && _subtraction) {
+    if (_backgroundFactor != factor) {
         _backgroundFactor = factor;
-        _subtraction->bind();
-        _subtraction->setUniformValue("backgroundFactor", _backgroundFactor);
-        _subtraction->release();
         _needUpdateFBO = true;
     }
 }
@@ -71,14 +77,8 @@ GLfloat GLWidget::colormapEnd() const
 
 void GLWidget::setColormapEnd(GLfloat end)
 {
-    if (_colormapEnd != end && _render && _render3D) {
+    if (_colormapEnd != end) {
         _colormapEnd = end;
-        _render->bind();
-        _render->setUniformValue("cmend", _colormapEnd);
-        _render->release();
-        _render3D->bind();
-        _render3D->setUniformValue("cmend", _colormapEnd);
-        _render3D->release();
         _needUpdateFBO = true;
     }
 }
@@ -90,14 +90,8 @@ GLfloat GLWidget::colormapBegin() const
 
 void GLWidget::setColormapBegin(GLfloat begin)
 {
-    if (_colormapBegin != begin && _render && _render3D) {
+    if (_colormapBegin != begin) {
         _colormapBegin = begin;
-        _render->bind();
-        _render->setUniformValue("cmbeg", _colormapBegin);
-        _render->release();
-        _render3D->bind();
-        _render3D->setUniformValue("cmbeg", _colormapBegin);
-        _render3D->release();
         _needUpdateFBO = true;
     }
 }
@@ -125,12 +119,7 @@ GLfloat GLWidget::zScale() const
 
 void GLWidget::setZScale(GLfloat zScale)
 {
-    if (_zScale != zScale && _render3D) {
-        _zScale = zScale;
-        _render3D->bind();
-        _render3D->setUniformValue("zscale", _zScale);
-        _render3D->release();
-    }
+    _zScale = zScale;
 }
 
 bool GLWidget::openImages(const QImage &background, const QImage &image)
@@ -199,7 +188,6 @@ void GLWidget::initializeGL()
     _subtraction->bind();
     _subtraction->setUniformValue("texture0", 0);
     _subtraction->setUniformValue("texture1", 1);
-    _subtraction->setUniformValue("backgroundFactor", _backgroundFactor);
     _subtraction->release();
 
     _sgfilter = new QGLShaderProgram(this);
@@ -221,8 +209,6 @@ void GLWidget::initializeGL()
     _render->link();
     _render->bind();
     _render->setUniformValue("texture0", 0);
-    _render->setUniformValue("cmend", _colormapEnd);
-    _render->setUniformValue("cmbeg", _colormapBegin);
     _render->release();
 
 
@@ -234,13 +220,10 @@ void GLWidget::initializeGL()
     _render3D->link();
     _render3D->bind();
     _render3D->setUniformValue("texture0", 0);
-    _render3D->setUniformValue("cmend", _colormapEnd);
-    _render3D->setUniformValue("cmbeg", _colormapBegin);
-    _render3D->setUniformValue("zscale", _zScale);
     _render3D->release();
 }
 
-void GLWidget::resizeGL(int w, int h)
+void GLWidget::resizeGL(int, int)
 {
     updateViewportInfos();
 }
@@ -274,6 +257,7 @@ void GLWidget::paintGL()
         glViewport(0, 0, _width, _height);
 
         _subtraction->bind();
+        _subtraction->setUniformValue("postfactor", GLfloat(_backgroundMinusImage ? 1.0 : -1.0));
         _subtraction->setUniformValue("backgroundFactor", _backgroundFactor);
 
         _subtraction->setAttributeArray(0, vertices, 2);
@@ -361,7 +345,7 @@ void GLWidget::paintGL()
         QMatrix4x4 m;
         float aspect = float(width()) / float(height());
         m.ortho(-_zoom * aspect, _zoom * aspect, -_zoom, _zoom, 0.0001, 1000.0);
-//        m.perspective(70.0, qreal(width())/qreal(height()), 0.01, 1000.0);
+        //        m.perspective(70.0, qreal(width())/qreal(height()), 0.01, 1000.0);
         m.translate(0.0, 0.0, -2);
         m.rotate(_beta, 1.0, 0.0, 0.0);
         m.rotate(_alpha, 0.0, 0.0, 1.0);
@@ -377,6 +361,9 @@ void GLWidget::paintGL()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         _render3D->bind();
+        _render3D->setUniformValue("cmend", _colormapEnd);
+        _render3D->setUniformValue("cmbeg", _colormapBegin);
+        _render3D->setUniformValue("zscale", _zScale);
         _render3D->setUniformValue("matrix", m);
         _render3D->setUniformValue("aspect", GLfloat(_width) / GLfloat(_height));
 
@@ -414,6 +401,9 @@ void GLWidget::paintGL()
         _render->setAttributeArray(0, vertices, 2);
         _render->setAttributeArray(1, texcoord, 2);
 
+        _render->setUniformValue("cmend", _colormapEnd);
+        _render->setUniformValue("cmbeg", _colormapBegin);
+
         _render->enableAttributeArray(0);
         _render->enableAttributeArray(1);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
@@ -432,6 +422,8 @@ void GLWidget::mousePressEvent(QMouseEvent *e)
         int x = (e->x() - _xviewport) * _width / _wviewport;
         int y = (e->y() - _yviewport) * _height / _hviewport;
 
+        if (x < 0 || x >= _width || y < 0 || y >= _height)
+            return;
 
         GLfloat g1 = qGray(_image.pixel(x, y));
         GLfloat g0 = qGray(_background.pixel(x, y));

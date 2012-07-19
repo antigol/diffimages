@@ -26,8 +26,10 @@
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QDockWidget" name="dockWidget">
+   <property name="floating">
+    <bool>true</bool>
+   </property>
    <property name="features">
     <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
    </property>
@@ -37,9 +39,19 @@
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QRadioButton" name="bmiRadioButton">
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;final = background * &lt;span style=&quot; font-weight:600;&quot;&gt;bf&lt;/span&gt; - image&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>final = background * bf - image</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="imbRadioButton">
+       <property name="text">
+        <string>final = image - background * bf</string>
        </property>
       </widget>
      </item>
@@ -254,12 +266,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>452</x>
-     <y>321</y>
+     <x>789</x>
+     <y>556</y>
     </hint>
     <hint type="destinationlabel">
-     <x>471</x>
-     <y>354</y>
+     <x>789</x>
+     <y>589</y>
     </hint>
    </hints>
   </connection>
