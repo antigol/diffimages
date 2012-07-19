@@ -11,7 +11,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    _set("epfl")
 {
     ui->setupUi(this);
 

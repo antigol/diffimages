@@ -6,7 +6,8 @@
 
 OpenImagesDialog::OpenImagesDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::OpenImagesDialog)
+    ui(new Ui::OpenImagesDialog),
+    _set("epfl")
 {
     ui->setupUi(this);
     connect(this, SIGNAL(accepted()), this, SLOT(saveSettings()));
