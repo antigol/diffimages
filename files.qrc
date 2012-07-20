@@ -8,4 +8,7 @@
         <file>render3D.frag</file>
         <file>viewer.frag</file>
     </qresource>
+    <qresource prefix="/img">
+        <file>icon.png</file>
+    </qresource>
 </RCC>

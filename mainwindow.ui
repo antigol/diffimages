@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>diffimages</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="files.qrc">
+    <normaloff>:/img/icon.png</normaloff>:/img/icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout"/>
   </widget>
@@ -257,7 +261,9 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="files.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>_3DViewCheckBox</sender>

@@ -44,3 +44,7 @@ FORMS += \
 
 target.path = /usr/bin
 INSTALLS += target
+
+
+unix:ICON = icon.png
+macx:ICON = rainbow.icns
