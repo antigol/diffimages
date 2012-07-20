@@ -26,6 +26,8 @@ Create the deb
 
 * rename sources folder in _diffimages-0.1.0_
 * compress the sources in _diffimages_0.1.0.orig.tar.gz_
-* open terminal inside _diffimages-0.1.0_ and run `debuild -S -sa --lintian-opts -i`
+* open terminal inside _diffimages-0.1.0_
+* `debuild -S -sa --lintian-opts -i`
 * `cd ..`
 * `sudo pbuilder build *.dsc`
+* the deb file is in _/var/cache/pbuilder/result_
