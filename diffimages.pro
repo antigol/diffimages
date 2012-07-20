@@ -42,9 +42,16 @@ FORMS += \
     mainwindow.ui \
     openimagesdialog.ui
 
-target.path = /usr/bin
-INSTALLS += target
-
-
 unix:ICON = icon.png
 macx:ICON = rainbow.icns
+
+unix {
+    menu.files = diffimages.desktop
+    menu.path = /usr/share/applications
+
+    share.files = icon.xpm
+    share.path = /share/diffimages
+
+    target.path = /usr/bin
+    INSTALLS += target menu share
+}

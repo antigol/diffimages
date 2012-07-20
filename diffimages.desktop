@@ -1,0 +1,13 @@
+
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=diffimages
+GenericName=diffimages
+Comment=
+Icon=/share/diffimages/icon.xpm
+Exec=diffimages
+Terminal=false
+StartupNotify=false
+Categories=Education;Science;Physics;
+
