@@ -44,6 +44,7 @@ FORMS += \
 
 unix:ICON = icon.png
 macx:ICON = rainbow.icns
+win32:RC_FILE = icon.rc
 
 unix {
     menu.files = diffimages.desktop
