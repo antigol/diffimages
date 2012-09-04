@@ -138,6 +138,7 @@ void MainWindow::readBackgroundFactor()
     connect(ui->backgroundFactorBfDoubleSpinBox, SIGNAL(valueChanged(double)), this, SLOT(changeBackgroundFactorGUI()));
 
     _backgroundViewer->setModificator(ui->backgroundFactorBfDoubleSpinBox->value(), 0.0);
+    _backgroundViewer->update();
 
     ui->multihistogram->setData(0, _imageViewer->data());
     ui->multihistogram->setData(1, _backgroundViewer->data());

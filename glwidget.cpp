@@ -9,6 +9,10 @@
 
 #define BUFFER_OFFSET(a) ((char*)NULL + (a))
 
+#ifndef GL_R32F
+#define GL_R32F                           0x822E
+#endif
+
 GLWidget::GLWidget(QWidget *parent)
     : QGLWidget(parent),
       _vbo(QGLBuffer::VertexBuffer), _ibo(QGLBuffer::IndexBuffer),
@@ -148,9 +152,11 @@ bool GLWidget::openImages(const QImage &background, const QImage &image)
 
     if (_fbo && _fbo->size() != _background.size()) {
         delete _fbo;
+        _fbo = 0;
     }
     if (!_fbo) {
         _fbo = new QGLFramebufferObject(_background.size(), QGLFramebufferObject::NoAttachment, GL_TEXTURE_2D, GL_R32F);
+        qDebug() << _fbo->isValid();
     }
 
     _sgfilter->bind();
